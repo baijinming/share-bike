@@ -1,0 +1,44 @@
+.header {
+  background-color: #fff;
+}
+
+.user-info {
+  height: 60px;
+  line-height: 60px;
+  border-bottom: 1px solid #f9c700;
+  padding: 0 30px;
+
+  .username {
+    font-size: 14px;
+    color: #f9c700;
+    margin-right: 20px;
+  }
+}
+
+.weather-warp {
+  height: 40px;
+  line-height: 40px;
+  padding: 0 30px;
+
+  .breadcrumb {
+    font-size: 18px;
+    margin-left: 50px;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      border: 10px solid transparent;
+      border-top: 10px solid #ffff;
+      top: 40px;
+      left: 10px;
+    }
+  }
+
+  .weather {
+    font-weight: 700;
+    margin-left: 20px;
+  }
+}
+
+
