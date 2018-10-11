@@ -4,6 +4,8 @@ import Admin from '../views/admin'
 import Home from '../views/home'
 import NotMatch from '../views/notMatch'
 import SecondPage from '../views/secondPage'
+import Bar from '../views/echarts/bar'
+import Pie from '../views/echarts/pie'
 
 class Router extends Component {
     render() {
@@ -16,6 +18,8 @@ class Router extends Component {
                                 <Switch>
                                     <Route path='/admin/home' component={Home} />
                                     <Route path='/admin/secondPage' component={SecondPage} />
+                                    <Route path='/admin/echarts/bar' component={Bar} />
+                                    <Route path='/admin/echarts/pie' component={Pie} />
                                     <Route component={NotMatch} />
                                 </Switch>
                             </Admin>

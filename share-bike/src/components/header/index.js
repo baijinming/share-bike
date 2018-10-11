@@ -1,5 +1,6 @@
 import React,{Component} from 'react'
 import {Link} from 'react-router-dom'
+import axios from 'axios'
 import './index.less'
 import {nowTime} from '../../utils'
 
@@ -17,16 +18,16 @@ class Header extends Component{
         },1000)
     }
     getWeather() {
-        fetch('http://t.weather.sojson.com/api/weather/city/101010100').then(res=> res.json()).then(json=> {
-            let form = json.data.forecast[0]
-            let weatherStr = `${form.low}~${form.high} ${form.fx} ${form.fl}`
+        axios.get('http://t.weather.sojson.com/api/weather/city/101010100').then(res=> {
+            let form = res.data.data.forecast[0];
+            let weatherStr = `${form.low}~${form.high} ${form.fx} ${form.fl}`;
             this.setState({
                 weather: weatherStr
             })
         })
     }
     componentWillMount() {
-        this.getTime()
+        this.getTime();
         this.getWeather()
     }
     render() {

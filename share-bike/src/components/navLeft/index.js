@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom'
 import { Menu } from 'antd'
 import './index.less'
 
+const SubMenu = Menu.SubMenu;
 
 class NavLeft extends Component{
     render() {
@@ -15,6 +16,14 @@ class NavLeft extends Component{
                        <Menu.Item key='2'>
                            <Link to='/admin/secondPage'>订单管理</Link>
                        </Menu.Item>
+                       <SubMenu title='图例'>
+                           <Menu.Item key='3'>
+                               <Link to='/admin/echarts/bar'>柱状图</Link>
+                           </Menu.Item>
+                           <Menu.Item key='4'>
+                               <Link to='/admin/echarts/pie'>饼状图</Link>
+                           </Menu.Item>
+                       </SubMenu>
                    </Menu>
             </div>
         )

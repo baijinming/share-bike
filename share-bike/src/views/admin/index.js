@@ -13,7 +13,7 @@ class Admin extends Component{
                     <Col span={4}>
                         <NavLeft />
                     </Col>
-                    <Col span={20}>
+                    <Col span={20} className='main-warp'>
                         <Header />
                         <div className='content-warp'>
                             <div className='content'>
