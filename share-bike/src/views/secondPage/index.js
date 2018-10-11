@@ -1,6 +1,6 @@
 import React,{Component} from 'react'
 import axios from '../../axios'
-import { Card, Select, Form, DatePicker, Button, Table } from 'antd'
+import { Card, Select, Form, DatePicker, Button, Table, message } from 'antd'
 import './index.less'
 
 const FormItem = Form.Item;
@@ -89,16 +89,46 @@ const FilterFormWrap = Form.create()(FilterForm)
 class SecondPage extends Component{
     state = {
         tableData: [],
-        pn: 1
+        pn: 1,
+        isLoading: false,
+        selectedRowKeys: [],
+        selectedItem: [],
+        pagination: {}
     };
     //获取table数据
     getTable() {
+        this.setState({
+            isLoading: true
+        })
         axios.get('https://www.easy-mock.com/mock/5bbb8bf854d6771eb592838d/order/list', {page: this.state.pn}).then(res => {
             this.setState({
-                tableData: res.result.item_list
+                tableData: res.result.item_list.map((item, index) => {
+                    item.key = index
+                    return item
+                }),
+                isLoading: false,
+                pagination: {
+                    pageSize: 10,
+                    total: res.result.total_count,
+                    current: this.state.pn,
+                    onChange: (page, pageSize) => {
+                        this.setState({
+                            pn: page
+                        },() => this.getTable())
+                    }
+                }
             })
         })
     }
+    //打开结束订单model
+    endModal() {
+        if(!this.state.selectedItem) {
+            message.warning('请选择一个订单')
+        }else {
+
+        }
+    }
+
     componentWillMount() {
         this.getTable()
     }
@@ -163,6 +193,16 @@ class SecondPage extends Component{
                 key: 'user_pay'
             }
         ]
+        const rowSelection = {
+            type: 'radio',
+            selectedRowKeys: this.state.selectedRowKeys,
+            onChange: (selectedRowKeys, selectedRows) => {
+                this.setState({
+                    selectedRowKeys: selectedRowKeys,
+                    selectedItem: selectedRows
+                })
+            }
+        }
         return (
             <div className='second-page'>
                 <Card>
@@ -170,12 +210,15 @@ class SecondPage extends Component{
                 </Card>
                 <Card>
                     <Button type='primary' style={{marginRight: 10}}>订单详情</Button>
-                    <Button type='primary'>结束订单</Button>
+                    <Button type='primary' onClick={this.endModal}>结束订单</Button>
                 </Card>
                 <Card>
                     <Table
                         columns={columns}
                         dataSource={this.state.tableData}
+                        loading={this.state.isLoading}
+                        rowSelection={rowSelection}
+                        pagination={this.state.pagination}
                     >
                     </Table>
                 </Card>
