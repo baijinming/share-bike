@@ -2,6 +2,7 @@ import React,{Component} from 'react'
 import axios from '../../axios'
 import { Card, Select, Form, DatePicker, Button, Table, message, Modal } from 'antd'
 import './index.less'
+import locale from 'antd/lib/date-picker/locale/zh_CN' //修改组件语言
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -63,7 +64,9 @@ class FilterForm extends Component{
                 </FormItem>
                 <FormItem label='订单时间'>
                     {getFieldDecorator('date')(
-                        <RangePicker></RangePicker>
+                        <RangePicker
+                            locale={locale}
+                        ></RangePicker>
                     )}
                 </FormItem>
                 <FormItem label='订单状态'>
