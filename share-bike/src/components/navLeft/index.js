@@ -2,14 +2,20 @@ import React,{Component} from 'react'
 import {Link} from 'react-router-dom'
 import { Menu } from 'antd'
 import './index.less'
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
+import action from '../../views/redux/action'
 
 const SubMenu = Menu.SubMenu;
 
 class NavLeft extends Component{
+    toggleTitle = ({ item, key, keyPath }) => {
+        this.props.changeTitle(item.props.children.props.children)
+    }
     render() {
         return (
             <div className='nav-left'>
-                   <Menu theme='dark'>
+                   <Menu theme='dark' onClick={this.toggleTitle}>
                        <Menu.Item key='1'>
                            <Link to='/admin/home'>首页</Link>
                        </Menu.Item>
@@ -30,4 +36,4 @@ class NavLeft extends Component{
     }
 }
 
-export default NavLeft
+export default connect(null, (dispatch) => bindActionCreators(action, dispatch))(NavLeft)

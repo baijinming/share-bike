@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom'
 import axios from 'axios'
 import './index.less'
 import {nowTime} from '../../utils'
+import {connect} from 'react-redux'
 
 class Header extends Component{
     state ={
@@ -41,7 +42,7 @@ class Header extends Component{
                 </div>
                 <div className='weather-warp'>
                     <div className='breadcrumb fll'>
-                        首页
+                        {this.props.navTitle}
                     </div>
                     <div className='flr'>
                         <div className='fll'>{this.state.time}</div>
@@ -53,4 +54,8 @@ class Header extends Component{
     }
 }
 
-export default Header
+export default connect(
+    (state) => ({
+        navTitle: state.title
+    })
+)(Header)
