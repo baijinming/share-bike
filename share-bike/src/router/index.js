@@ -4,6 +4,7 @@ import Admin from '../views/admin'
 import Home from '../views/home'
 import NotMatch from '../views/notMatch'
 import SecondPage from '../views/secondPage'
+import Detail from '../views/secondPage/detail'
 import Bar from '../views/echarts/bar'
 import Pie from '../views/echarts/pie'
 
@@ -24,6 +25,7 @@ class Router extends Component {
                                 </Switch>
                             </Admin>
                         } />
+                        <Route path='/order/detail/:id' component={Detail} />
                         <Route component={NotMatch} />
                     </Switch>
                 </div>

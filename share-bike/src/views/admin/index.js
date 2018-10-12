@@ -10,7 +10,7 @@ class Admin extends Component{
         return (
             <div className='admin'>
                 <Row>
-                    <Col span={4}>
+                    <Col span={4} className='nav'>
                         <NavLeft />
                     </Col>
                     <Col span={20} className='main-warp'>

@@ -1,6 +1,6 @@
 import React,{Component} from 'react'
 import axios from '../../axios'
-import { Card, Select, Form, DatePicker, Button, Table, message } from 'antd'
+import { Card, Select, Form, DatePicker, Button, Table, message, Modal } from 'antd'
 import './index.less'
 
 const FormItem = Form.Item;
@@ -39,12 +39,12 @@ class FilterForm extends Component{
     ];
 
     //查询
-    inquireForm() {
+    inquireForm= () => {
         const form = this.props.form.getFieldsValue()
         console.log(form);
     }
     //重置
-    resetForm() {
+    resetForm= () => {
         this.props.form.resetFields()
     }
     render() {
@@ -93,14 +93,16 @@ class SecondPage extends Component{
         isLoading: false,
         selectedRowKeys: [],
         selectedItem: [],
-        pagination: {}
+        pagination: {},
+        visible: false,
+        ebikeInfo: []
     };
     //获取table数据
-    getTable() {
+    getTable= () => {
         this.setState({
             isLoading: true
         })
-        axios.get('https://www.easy-mock.com/mock/5bbb8bf854d6771eb592838d/order/list', {page: this.state.pn}).then(res => {
+        axios.get('/order/list', {page: this.state.pn}).then(res => {
             this.setState({
                 tableData: res.result.item_list.map((item, index) => {
                     item.key = index
@@ -113,7 +115,9 @@ class SecondPage extends Component{
                     current: this.state.pn,
                     onChange: (page, pageSize) => {
                         this.setState({
-                            pn: page
+                            pn: page,
+                            selectedRowKeys: [],
+                            selectedItem: [],
                         },() => this.getTable())
                     }
                 }
@@ -121,11 +125,37 @@ class SecondPage extends Component{
         })
     }
     //打开结束订单model
-    endModal() {
-        if(!this.state.selectedItem) {
+    endModal= () => {
+        if(!this.state.selectedItem.length) {
             message.warning('请选择一个订单')
         }else {
-
+            axios.get('/order/ebike_info').then(res => {
+                this.setState({
+                    ebikeInfo: res.result,
+                    visible: true
+                })
+            })
+        }
+    }
+    //结束订单
+    endOrder= () => {
+        axios.get('/order/finish_order', {id: this.state.ebikeInfo.id}).then(res => {
+            message.success('成功结束订单')
+            this.setState({
+                visible: false,
+                selectedRowKeys: [],
+                selectedItem: [],
+            })
+            this.getTable()
+        })
+    }
+    //订单详情
+    ebikeDetail= () => {
+        if (!this.state.selectedItem.length) {
+            message.warning('请选择一个订单')
+        } else {
+            let id = this.state.selectedItem[0].id
+            window.open(`/#/order/detail/${id}`, '_blank')
         }
     }
 
@@ -209,7 +239,7 @@ class SecondPage extends Component{
                     <FilterFormWrap></FilterFormWrap>
                 </Card>
                 <Card>
-                    <Button type='primary' style={{marginRight: 10}}>订单详情</Button>
+                    <Button type='primary' style={{marginRight: 10}} onClick={this.ebikeDetail}>订单详情</Button>
                     <Button type='primary' onClick={this.endModal}>结束订单</Button>
                 </Card>
                 <Card>
@@ -222,6 +252,19 @@ class SecondPage extends Component{
                     >
                     </Table>
                 </Card>
+                <Modal
+                    title='结束订单'
+                    visible={this.state.visible}
+                    okText="结束"
+                    cancelText="取消"
+                    onCancel={() => this.setState({visible: false})}
+                    onOk={this.endOrder}
+                >
+                    <p><strong>车辆编号：</strong>{this.state.ebikeInfo.bike_sn}</p>
+                    <p><strong>剩余电量：</strong>{this.state.ebikeInfo.battery}</p>
+                    <p><strong>行程开始时间：</strong>{this.state.ebikeInfo.start_time}</p>
+                    <p><strong>当前位置：</strong>{this.state.ebikeInfo.location}</p>
+                </Modal>
             </div>
         )
     }
